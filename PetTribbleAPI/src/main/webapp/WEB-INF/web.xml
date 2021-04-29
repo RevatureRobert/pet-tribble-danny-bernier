@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0">
+
+    <context-param>
+        <param-name>global</param-name>
+        <param-value>params</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>tribble</servlet-name>
+        <servlet-class>dev.tribble.servlet.TribbleServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>lab</servlet-name>
+        <servlet-class>dev.tribble.servlet.LabServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>tribble</servlet-name>
+        <url-pattern>/tribble/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>lab</servlet-name>
+        <url-pattern>/lab/*</url-pattern>
+    </servlet-mapping>
+</web-app>
