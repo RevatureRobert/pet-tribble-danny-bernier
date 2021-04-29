@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class LabDAO {
@@ -54,6 +56,18 @@ public class LabDAO {
             }
         }
         return Optional.empty();
+    }
+
+    public List<Lab> getAll() throws SQLException {
+        List<Lab> labs = new ArrayList<>();
+
+        try(PreparedStatement preparedStatement = CONNECTION.prepareStatement("SELECT * FROM labs")) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                labs.add(new Lab(resultSet.getInt(1), resultSet.getString(2)));
+            }
+        }
+        return labs;
     }
 
     /**
