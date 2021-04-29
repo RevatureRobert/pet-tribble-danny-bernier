@@ -2,12 +2,15 @@ package dev.tribble.servlet;
 
 import com.google.gson.Gson;
 import dev.tribble.database.LabDAO;
+import dev.tribble.model.Lab;
+import org.apache.commons.io.IOUtils;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 public class LabServlet extends HttpServlet {
 
@@ -53,7 +56,19 @@ public class LabServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        try {
+            String body = IOUtils.toString(req.getReader());
+            Lab lab = new Gson().fromJson(body, Lab.class);
+            LAB_DAO.saveLab(lab);
+            resp.setStatus(200);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resp.setStatus(500);
+
+        } catch (Exception e) {
+            resp.setStatus(400);
+        }
     }
 
     /**
@@ -65,7 +80,21 @@ public class LabServlet extends HttpServlet {
      */
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+        try {
+            String body = IOUtils.toString(req.getReader());
+            Gson gson = new Gson();
+            PrintWriter printWriter = resp.getWriter();
+            Lab lab = gson.fromJson(body, Lab.class);
+            printWriter.println(gson.toJson(LAB_DAO.updateLab(lab)));
+            resp.setStatus(200);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resp.setStatus(500);
+
+        } catch (Exception e) {
+            resp.setStatus(400);
+        }
     }
 
     /**
@@ -77,6 +106,18 @@ public class LabServlet extends HttpServlet {
      */
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
+
+        try {
+            LAB_DAO.deleteLabById(Integer.parseInt(req.getPathInfo().split("/")[1]));
+            resp.setStatus(200);
+
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            e.printStackTrace();
+            resp.setStatus(400);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(500);
+        }
     }
 }

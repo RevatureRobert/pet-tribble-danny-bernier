@@ -40,7 +40,7 @@ public class LabDAO {
      * @return True if updated successfully false if not.
      * @throws SQLException Thrown if something goes wrong with the database and connection
      */
-    public boolean updateLab(Lab lab) throws SQLException {
+    public Optional<Lab> updateLab(Lab lab) throws SQLException {
         if (lab == null)
             throw new IllegalArgumentException(LAB_NULL_MESSAGE);
         else if (lab.getLabId() <= 0)
@@ -49,8 +49,11 @@ public class LabDAO {
         try(PreparedStatement preparedStatement = CONNECTION.prepareStatement("UPDATE labs SET name=? WHERE lab_id=?")) {
             preparedStatement.setString(1, lab.getName());
             preparedStatement.setInt(2, lab.getLabId());
-            return preparedStatement.executeUpdate() > 0;
+            if(preparedStatement.executeUpdate() > 0){
+                return Optional.of(lab);
+            }
         }
+        return Optional.empty();
     }
 
     /**
@@ -89,6 +92,22 @@ public class LabDAO {
 
         try(PreparedStatement preparedStatement = CONNECTION.prepareStatement("DELETE FROM labs WHERE lab_id=?")) {
             preparedStatement.setInt(1, lab.getLabId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Deletes a Lab from the database
+     * @param labId The ID of the Lab to be deleted
+     */
+    public void deleteLabById(int labId){
+        if (labId <= 0)
+            return;
+
+        try(PreparedStatement preparedStatement = CONNECTION.prepareStatement("DELETE FROM labs WHERE lab_id=?")) {
+            preparedStatement.setInt(1, labId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

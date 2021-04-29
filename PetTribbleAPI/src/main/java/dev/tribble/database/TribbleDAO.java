@@ -43,7 +43,7 @@ public class TribbleDAO {
      * @return Returns true if updated successfully false if not
      * @throws SQLException Thrown if something goes wrong with the database and connection
      */
-    public boolean updateTribble (Tribble tribble) throws SQLException {
+    public Optional<Tribble> updateTribble (Tribble tribble) throws SQLException {
         if(tribble == null)
             throw new IllegalArgumentException(TRIBBLE_NULL_MESSAGE);
 
@@ -55,8 +55,11 @@ public class TribbleDAO {
             preparedStatement.setInt(2, tribble.getAge());
             preparedStatement.setInt(3, tribble.getLabId());
             preparedStatement.setInt(4, tribble.getId());
-            return preparedStatement.executeUpdate() > 0;
+            if(preparedStatement.executeUpdate() > 0){
+                return Optional.of(tribble);
+            }
         }
+        return Optional.empty();
     }
 
     /**
@@ -99,6 +102,21 @@ public class TribbleDAO {
 
         try(PreparedStatement preparedStatement = CONNECTION.prepareStatement("DELETE FROM tribbles WHERE tribble_id=?")) {
             preparedStatement.setInt(1, tribble.getId());
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    /**
+     * Deletes a Tribble from the database
+     * @param tribbleId The ID of the Tribble to be deleted
+     * @throws SQLException Thrown if something goes wrong with the database and connection
+     */
+    public void deleteTribbleById(int tribbleId) throws SQLException {
+        if(tribbleId <= 0)
+            return;
+
+        try(PreparedStatement preparedStatement = CONNECTION.prepareStatement("DELETE FROM tribbles WHERE tribble_id=?")) {
+            preparedStatement.setInt(1, tribbleId);
             preparedStatement.executeUpdate();
         }
     }
