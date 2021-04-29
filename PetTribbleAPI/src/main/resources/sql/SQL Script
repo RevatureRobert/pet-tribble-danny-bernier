@@ -1,5 +1,5 @@
 create schema tribble;
-create user tribble_system with password 'tribbletime';
+create user *CENSORED* with password '*CENSORED*';
 
 grant all on schema tribble to tribble_system;
 grant insert, select, delete, update on all tables in schema tribble to tribble_system;

@@ -11,7 +11,7 @@ public enum DBConnection {
     private DBConnection(){
         try {
             Class.forName("org.postgresql.Driver");
-            this.connection = DriverManager.getConnection("jdbc:postgresql://enterprise.c8zc9lkfuycr.us-east-2.rds.amazonaws.com:5432/postgres?currentSchema=tribble", "tribble_system", "tribbletime");
+            this.connection = DriverManager.getConnection("jdbc:postgresql://enterprise.c8zc9lkfuycr.us-east-2.rds.amazonaws.com:5432/postgres?currentSchema=tribble", "*CENSORED*", "*CENSORED*");
         } catch (Exception e) {
             System.out.println(e);
         }
