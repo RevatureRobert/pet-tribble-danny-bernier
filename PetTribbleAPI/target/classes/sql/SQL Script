@@ -1,0 +1,25 @@
+create schema tribble;
+create user tribble_system with password 'tribbletime';
+
+grant all on schema tribble to tribble_system;
+grant insert, select, delete, update on all tables in schema tribble to tribble_system;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN schema tribble to tribble_system;
+
+create table tribble.tribbles (
+	tribble_id SERIAL,
+	name VARCHAR(255) not null,
+	age integer not null,
+	lab_id integer not null,
+	primary key (tribble_id),
+	foreign key (lab_id) references tribble.labs(lab_id) on delete cascade,
+	constraint age_constraint check(age >= 0)
+);
+
+create table tribble.labs (
+	lab_id SERIAL,
+	name VARCHAR(255) not null,
+	primary key (lab_id)
+);
+
+select * from tribble.tribbles;
+select * from tribble.labs;
