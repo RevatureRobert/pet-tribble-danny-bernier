@@ -32,18 +32,36 @@ public class TribbleServlet extends HttpServlet {
         PrintWriter printWriter = resp.getWriter();
         Gson gson = new Gson();
 
-        try {
-            printWriter.println(gson.toJson(TRIBBLE_DAO.getTribbleById(
-                    Integer.parseInt(req.getPathInfo().split("/")[1])).orElse(null)));
-            resp.setStatus(200);
+        //if path parameter present ie /tribble/{id}
+        if(req.getPathInfo() != null) {
+            try {
+                printWriter.println(gson.toJson(TRIBBLE_DAO.getTribbleById(
+                        Integer.parseInt(req.getPathInfo().split("/")[1])).orElse(null)));
+                resp.setStatus(200);
 
-        } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            e.printStackTrace();
-            resp.setStatus(400);
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                e.printStackTrace();
+                resp.setStatus(400);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            resp.setStatus(500);
+            } catch (Exception e) {
+                e.printStackTrace();
+                resp.setStatus(500);
+            }
+
+            //if no path parameter present ie /tribble
+        } else {
+            try {
+                printWriter.println(gson.toJson(TRIBBLE_DAO.getAll()));
+                resp.setStatus(200);
+
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                e.printStackTrace();
+                resp.setStatus(400);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                resp.setStatus(500);
+            }
         }
     }
 

@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class TribbleDAO {
@@ -89,6 +91,23 @@ public class TribbleDAO {
             }
 
         }
+    }
+
+    public List<Tribble> getAll() throws SQLException {
+        List<Tribble> tribbles = new ArrayList<>();
+
+        try(PreparedStatement preparedStatement = CONNECTION.prepareStatement("SELECT * FROM tribbles")) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                tribbles.add(new Tribble(resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3),
+                        resultSet.getInt(4)));
+            }
+        }
+
+        return tribbles;
     }
 
     /**
