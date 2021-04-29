@@ -93,6 +93,11 @@ public class TribbleDAO {
         }
     }
 
+    /**
+     * Gets all Tribbles
+     * @return A list of all Tribbles
+     * @throws SQLException Thrown if something goes wrong with the database and connection
+     */
     public List<Tribble> getAll() throws SQLException {
         List<Tribble> tribbles = new ArrayList<>();
 

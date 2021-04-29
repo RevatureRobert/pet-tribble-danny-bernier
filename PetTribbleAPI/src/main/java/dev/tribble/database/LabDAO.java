@@ -58,6 +58,11 @@ public class LabDAO {
         return Optional.empty();
     }
 
+    /**
+     * Gets all Labs
+     * @return A list of all Labs
+     * @throws SQLException Thrown if something goes wrong with the database and connection
+     */
     public List<Lab> getAll() throws SQLException {
         List<Lab> labs = new ArrayList<>();
 
